@@ -12,7 +12,7 @@ type Data = { fit: Fit; points: Pt[] };
 
 const law = (f: Fit, n: number, d: number) => f.E + f.A / Math.pow(n, f.alpha) + f.B / Math.pow(d, f.beta);
 const fmtSI = (v: number) => (v >= 1e9 ? `${(v / 1e9).toFixed(2)} B` : v >= 1e6 ? `${(v / 1e6).toFixed(1)} M` : v.toFixed(0));
-const fmtC = (c: number) => { const e = Math.floor(Math.log10(c)); return `${(c / 10 ** e).toFixed(2)}e${e}`; };
+const fmtC = (c: number) => { const e = Math.floor(Math.log10(c)); const sup = String(e).split('').map((ch) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[+ch]).join(''); return `${(c / 10 ** e).toFixed(2)} × 10${sup}`; };
 
 // paper panel (b): log10 axes, tokens reversed, z = error in [0.025, 0.078]
 const N_RANGE = [2.8e6, 300e6], D_RANGE = [0.3e9, 30e9], Z_RANGE = [0.025, 0.078];
@@ -190,7 +190,8 @@ export default function ScalingSurface({ height = 400 }: { height?: number }) {
     const camPosBox = target.clone().add(dir.multiplyScalar(6));
     const toWorld = (v: THREE.Vector3) => new THREE.Vector3(v.x, v.z, -v.y);
     const aspect = width / height;
-    const viewH = 1.28;
+    // Leave room for the projected axis labels on narrow screens.
+    const viewH = Math.max(1.28, 1.85 / aspect);
     const camera = new THREE.OrthographicCamera(-viewH * aspect / 2, viewH * aspect / 2, viewH / 2, -viewH / 2, 0.1, 50);
     camera.position.copy(toWorld(camPosBox));
     camera.up.set(0, 1, 0);
@@ -261,10 +262,10 @@ export default function ScalingSurface({ height = 400 }: { height?: number }) {
 
   return (
     <div className='relative w-full select-none' style={{ height }}>
-      <div ref={hostRef} className='absolute inset-0' style={{ cursor: 'crosshair' }} />
+      <div ref={hostRef} className='absolute inset-0 overflow-hidden' style={{ cursor: 'crosshair' }} />
       {!data && <div className='absolute inset-0 flex items-center justify-center text-sm text-gray-400'>Loading scaling data…</div>}
       {hover && tip && (
-        <div className='pointer-events-none absolute z-20 border border-gray-300 bg-white px-3 py-2 text-xs text-gray-600' style={tip}>
+        <div className='pointer-events-none absolute z-20 border border-gray-200 bg-white px-3 py-2 shadow-lg text-xs text-gray-600' style={tip}>
           {hover.pt ? (
             <>
               <div className='font-medium text-gray-800'>{hover.pt.label}</div>
@@ -273,7 +274,7 @@ export default function ScalingSurface({ height = 400 }: { height?: number }) {
           ) : (
             <div className='font-medium text-gray-800'>Fitted surface</div>
           )}
-          <div className='text-[0.68rem] text-gray-500'>N {fmtSI(hover.n)} · D {fmtSI(hover.d)} tokens · C {fmtC(6 * hover.n * hover.d)} FLOP</div>
+          <div className='text-[0.68rem] text-gray-500'>N {fmtSI(hover.n)} · D {fmtSI(hover.d)} tokens · {fmtC(6 * hover.n * hover.d)} FLOPs</div>
           <table className='mt-1 tabular-nums'>
             <tbody>
               <tr><td className='pr-3'>Predicted error</td><td className='text-right font-medium text-gray-800'>{hover.pred.toFixed(4)} m/s</td></tr>

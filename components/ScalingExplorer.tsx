@@ -12,7 +12,7 @@ const INK = '#444444';
 const FIT_INK = '#7e858b';
 const law = (f: Fit, n: number, d: number) => f.E + f.A / Math.pow(n, f.alpha) + f.B / Math.pow(d, f.beta);
 const fmtSI = (v: number) => (v >= 1e9 ? `${(v / 1e9).toFixed(2)} B` : v >= 1e6 ? `${(v / 1e6).toFixed(1)} M` : v.toFixed(0));
-const fmtC = (c: number) => { const e = Math.floor(Math.log10(c)); return `${(c / 10 ** e).toFixed(2)}e${e}`; };
+const fmtC = (c: number) => { const e = Math.floor(Math.log10(c)); const sup = String(e).split('').map((ch) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[+ch]).join(''); return `${(c / 10 ** e).toFixed(2)} × 10${sup}`; };
 
 export default function ScalingExplorer({ height: fixedHeight }: { height?: number } = {}) {
   const [data, setData] = React.useState<Data | null>(null);
@@ -103,7 +103,7 @@ export default function ScalingExplorer({ height: fixedHeight }: { height?: numb
           ))}
           <line x1={m.l} x2={width - m.r} y1={height - m.b} y2={height - m.b} stroke='#b8bfc4' />
           <line x1={m.l} x2={m.l} y1={m.t} y2={height - m.b} stroke='#b8bfc4' />
-          <text x={(m.l + width - m.r) / 2} y={height - 8} textAnchor='middle' fontSize={12} fill={INK}>Compute proxy 6ND (FLOP)</text>
+          <text x={(m.l + width - m.r) / 2} y={height - 8} textAnchor='middle' fontSize={12} fill={INK}>Training compute (FLOPs)</text>
           <text transform={`translate(14,${(m.t + height - m.b) / 2}) rotate(-90)`} textAnchor='middle' fontSize={12} fill={INK}>Velocity error (m/s)</text>
 
           {/* fitted compute-optimal frontier */}
@@ -127,9 +127,9 @@ export default function ScalingExplorer({ height: fixedHeight }: { height?: numb
         </svg>
       )}
       {hp && tip && (
-        <div className='pointer-events-none absolute z-20 border border-gray-300 bg-white px-3 py-2 text-xs text-gray-600' style={tip}>
+        <div className='pointer-events-none absolute z-20 border border-gray-200 bg-white px-3 py-2 shadow-lg text-xs text-gray-600' style={tip}>
           <div className='font-medium text-gray-800'>{hp.label}</div>
-          <div className='text-[0.68rem] text-gray-500'>step {hp.step.toLocaleString()} · epoch {hp.epoch + 1} · N {fmtSI(hp.N)} · D {fmtSI(hp.D)} tokens · C {fmtC(hp.C)} FLOP</div>
+          <div className='text-[0.68rem] text-gray-500'>step {hp.step.toLocaleString()} · epoch {hp.epoch + 1} · N {fmtSI(hp.N)} · D {fmtSI(hp.D)} tokens · {fmtC(hp.C)} FLOPs</div>
           <table className='mt-1 tabular-nums'>
             <tbody>
               <tr><td className='pr-3'>Measured error</td><td className='text-right font-medium text-gray-800'>{hp.loss.toFixed(4)} m/s</td></tr>

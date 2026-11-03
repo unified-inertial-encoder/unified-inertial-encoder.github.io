@@ -1,4 +1,4 @@
-# A Unified Inertial Encoder for Human and Humanoid Motions
+# A Unified Inertial Encoder for Human and Humanoid Motion
 
 Project page for the paper, built with Next.js (static export) and Tailwind CSS v4. The layout and
 components (hero with masked background video, abstract, highlight slider, figure blocks,
@@ -6,13 +6,14 @@ citation) are ported from the [Co-Me](https://co-me-tokens.github.io/) project p
 
 ## Layout
 
-- `app/page.tsx` — the single landing page (hero, abstract with teaser, video slider, real-G1 demos,
-  method, results tables and figures, citation).
+- `app/page.tsx` — the single landing page (named authors, abstract with teaser, video slider,
+  method and datasets, real-G1 demos and runtime, results and ablations, interactive plots,
+  limitations, citation).
 - `app/globals.css` — Tailwind v4 theme tokens (`primary` palette, `dark`, `ours` table shade),
   typography, `.layout`, `scrollbar-dark`, `animated-underline`, `results-table`.
 - `components/` — `Figure`, `KaTeX`, `Compare` (image slider), `VideoCard` (poster → player),
   `ResultsTables`, `links/*`.
-- `constant/config.ts` — title, description, site URL, GitHub link.
+- `constant/config.ts` — title, description, authors, site URL, GitHub link.
 - `public/video/` — re-encoded H.264 clips: hero background (`hero.mp4`) and the three
   narrated segments (motivation, method, results); `public/images/posters/` holds their poster frames.
 - `public/images/` — paper figures (teaser, overview, qualitative trajectories, language strip,
@@ -31,6 +32,25 @@ npm run dev
 
 Open http://localhost:3000. Run `npm run lint`, `npm run typecheck` and `npm run build` to check the
 project; `GITHUB_PAGES=true npm run build` reproduces the deployed build under `/unified-inertial-encoder/`.
+
+## Paper source
+
+Content and numerical tables match the sibling `latex/` repository's November 2, 2026 Overleaf
+version (`6f15545`, merged into `main` as `bc448d6`). The downloadable PDF includes the named
+authors. The site retains the existing video demos and interactive data; the scaling fit
+matches `latex/figures/scaling_3d_sources.json`, and the t-SNE opens on the paper's `[CLS]` view.
+
+Web figures are rendered from the paper PDFs at 2200 pixels wide:
+
+- `Figure1.pdf` → `public/images/teaser.png`
+- `Figure2.pdf` → `public/images/overview.png`
+- `Figure5.pdf` → `public/images/real-g1-runtime.png`
+- `qual_lang_g1_col.pdf`, `cls_tsne.pdf`, `scaling_3d.pdf` → matching PNG filenames
+
+The paper PDF was compiled in a temporary copy using Tectonic. On case-sensitive filesystems,
+the paper's `figures/figure2.pdf` reference needs an alias to `figures/Figure2.pdf`.
+The temporary build also selects T1 font encoding to retain the IEEE class's Times fonts.
+These compatibility adjustments do not change the tracked paper sources.
 
 ## GitHub Pages
 

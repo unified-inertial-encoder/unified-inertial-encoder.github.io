@@ -7,7 +7,16 @@ import { asset, cn } from '@/lib/utils';
 type Item = { src: string; label: string };
 
 /** One looping video at a time with prev / next arrows on either side. */
-export default function VideoCarousel({ items, className }: { items: Item[]; className?: string }) {
+export default function VideoCarousel({
+  items,
+  className,
+  aspect = '2148 / 486',
+}: {
+  items: Item[];
+  className?: string;
+  /** width / height of the clips, e.g. '16 / 9' */
+  aspect?: string;
+}) {
   const [i, setI] = React.useState(0);
   const n = items.length;
   const go = (d: number) => setI((v) => (v + d + n) % n);
@@ -19,8 +28,8 @@ export default function VideoCarousel({ items, className }: { items: Item[]; cla
       onClick={() => go(d)}
       aria-label={d < 0 ? 'Previous set' : 'Next set'}
       className={cn(
-        'flex h-12 w-8 shrink-0 items-center justify-center self-center border border-gray-300 bg-white text-gray-600',
-        'hover:border-gray-800 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500'
+        'flex h-8 w-8 shrink-0 items-center justify-center self-center md:h-10 md:w-10 bg-white text-gray-600 shadow-sm ring-1 ring-gray-200 transition',
+        'hover:text-gray-900 hover:ring-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500'
       )}
     >
       <svg viewBox='0 0 24 24' className='h-5 w-5' fill='none' stroke='currentColor' strokeWidth='2' aria-hidden='true'>
@@ -34,12 +43,27 @@ export default function VideoCarousel({ items, className }: { items: Item[]; cla
       <div className='flex items-stretch gap-3'>
         {arrow(-1)}
         {/* key on src so the browser restarts playback from the first frame */}
-        <video key={item.src} autoPlay loop muted playsInline className='min-w-0 flex-1' aria-label={item.label}>
-          <source src={asset(item.src)} type='video/mp4' />
-        </video>
+        {/* fixed-ratio box reserves the height while the next clip loads */}
+        {/* on phones keep the clip legible and let it scroll sideways */}
+        <div className='scrollbar-light min-w-0 flex-1 overflow-x-auto md:overflow-visible'>
+        <div className='relative min-w-[680px] bg-white md:min-w-0' style={{ aspectRatio: aspect }}>
+          <video
+            key={item.src}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload='auto'
+            className='absolute inset-0 h-full w-full object-contain'
+            aria-label={item.label}
+          >
+            <source src={asset(item.src)} type='video/mp4' />
+          </video>
+        </div>
+        </div>
         {arrow(1)}
       </div>
-      <div className='mt-2 flex items-center justify-center gap-3 text-xs text-gray-500'>
+      <div className='mt-3 flex items-center justify-center gap-3 text-xs text-gray-500'>
         <span className='tabular-nums'>
           {i + 1} / {n}
         </span>
@@ -54,7 +78,7 @@ export default function VideoCarousel({ items, className }: { items: Item[]; cla
               aria-selected={j === i}
               aria-label={it.label}
               onClick={() => setI(j)}
-              className={cn('h-2 w-2', j === i ? 'bg-gray-800' : 'bg-gray-300 hover:bg-gray-500')}
+              className={cn('h-1.5 transition-all', j === i ? 'w-5 bg-gold' : 'w-1.5 bg-gray-300 hover:bg-gray-500')}
             />
           ))}
         </span>

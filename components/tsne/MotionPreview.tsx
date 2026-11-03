@@ -11,11 +11,11 @@ const PATH = '#8c8c8c';
 const GRID = '#e4e4e4';
 const INK = '#444444';
 
-type Joint = { name: string; type: string; parent: string; child: string; origin: number[]; axis: number[] };
-type Kin = { base: string; actuated: string[]; joints: Joint[] };
+export type Joint = { name: string; type: string; parent: string; child: string; origin: number[]; axis: number[] };
+export type Kin = { base: string; actuated: string[]; joints: Joint[] };
 
 let g1Cache: Promise<{ gltf: THREE.Group; kin: Kin }> | null = null;
-function loadG1(base: string) {
+export function loadG1(base: string) {
   if (!g1Cache) {
     g1Cache = Promise.all([
       new GLTFLoader().loadAsync(`${base}/g1.glb`),
@@ -120,7 +120,7 @@ function makeG1(gltf: THREE.Group, kin: Kin, material: THREE.Material): Body {
 
 /* ------------------------------------------------------------------ data */
 
-function decode(buf: ArrayBuffer, kind: number, frames: number, nPoints: number): Float32Array[] {
+export function decode(buf: ArrayBuffer, kind: number, frames: number, nPoints: number): Float32Array[] {
   const raw = new Int16Array(buf);
   const per = kind === 0 ? nPoints * 3 : 7 + nPoints;
   const out: Float32Array[] = [];

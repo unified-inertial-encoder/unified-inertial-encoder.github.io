@@ -2,25 +2,31 @@
 
 /* Ported from the Co-Me template (Tailwind v3 config + globals.css) to Tailwind v4. */
 @theme {
-  --font-primary: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-primary: var(--font-serif-src), Cambria, 'Times New Roman', serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif-src), Cambria, 'Times New Roman', serif;
 
-  /* #region  /**=========== Primary Color (sky) =========== */
-  --color-primary-50: #f0f9ff;
-  --color-primary-100: #e0f2fe;
-  --color-primary-200: #bae6fd;
-  --color-primary-300: #7dd3fc;
-  --color-primary-400: #38bdf8;
-  --color-primary-500: #0ea5e9;
-  --color-primary-600: #0284c7;
-  --color-primary-700: #0369a1;
-  --color-primary-800: #075985;
-  --color-primary-900: #0c4a6e;
-  --color-primary-950: #082f49;
+  /* #region  /**=========== Primary Color (steel blue, matches paper "human" colour) =========== */
+  --color-primary-50: #f2f6fb;
+  --color-primary-100: #e3ebf5;
+  --color-primary-200: #c6d7ea;
+  --color-primary-300: #9db9da;
+  --color-primary-400: #6f95c4;
+  --color-primary-500: #4d77ad;
+  --color-primary-600: #3b5f91;
+  --color-primary-700: #314d76;
+  --color-primary-800: #2b4262;
+  --color-primary-900: #263852;
+  --color-primary-950: #182336;
   /* #endregion  /**======== Primary Color =========== */
 
   --color-dark: #222222;
-  --color-ours: #e1eaf2; /* paper "oursshade" table highlight */
+  --color-ours: #f7f0de; /* paper "oursshade" table highlight */
   --color-gold: #d8b35c; /* paper "Ours" trajectory colour */
+  --color-gold-ink: #a8822a; /* gold readable as text */
+  --color-human-fill: #edf2f8; /* paper figure blue panel fill */
+  --color-robot-fill: #faf5e9; /* paper figure cream panel fill */
+  --color-paper: #f8f7f4; /* warm off-white band */
 
   --animate-flicker: flicker 3s linear infinite;
   --animate-shimmer: shimmer 1.3s linear infinite;
@@ -45,27 +51,34 @@
 @layer base {
   /* #region  /**=========== Typography =========== */
   .h0 {
-    @apply font-primary text-3xl font-bold md:text-5xl;
+    @apply font-serif text-3xl font-semibold md:text-5xl;
   }
   h1,
   .h1 {
-    @apply font-primary text-2xl font-bold md:text-4xl;
+    @apply font-serif text-2xl font-semibold text-balance md:text-4xl;
   }
   h2,
   .h2 {
-    @apply font-primary text-xl font-bold md:text-3xl;
+    @apply font-serif text-[1.65rem] leading-tight font-semibold tracking-[-0.01em] text-gray-900 md:text-[2.1rem];
   }
   h3,
   .h3 {
-    @apply font-primary text-lg font-bold md:text-2xl;
+    @apply font-serif text-lg font-semibold text-gray-900 md:text-[1.3rem];
   }
   h4,
   .h4 {
-    @apply font-primary text-base font-bold md:text-lg;
+    @apply font-serif text-base font-semibold text-gray-900 md:text-lg;
   }
   body,
   .p {
-    @apply font-primary text-sm md:text-base;
+    @apply font-serif text-[1.02rem] leading-[1.7] md:text-[1.1rem] md:leading-[1.75];
+  }
+  body {
+    @apply bg-white text-gray-700 antialiased;
+    font-optical-sizing: auto;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--color-gold) 35%, transparent);
   }
   /* #endregion  /**======== Typography =========== */
 
@@ -90,6 +103,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
   }
 }
 
@@ -125,20 +139,66 @@
   }
 }
 
+/* Running text */
+@utility prose-col {
+  @apply text-pretty;
+}
+
 /* Results tables */
 @utility results-table {
-  @apply w-full border-collapse text-xs md:text-sm tabular-nums;
+  @apply w-full border-collapse font-serif text-[0.8rem] leading-[1.4] tabular-nums md:text-[0.95rem];
+  font-variant-numeric: tabular-nums lining-nums;
   & th,
   & td {
-    @apply px-2 py-1.5 text-right whitespace-nowrap;
+    @apply px-2.5 py-[0.3rem] text-right whitespace-nowrap;
   }
-  & th {
-    @apply font-semibold text-gray-700;
+  & thead th {
+    @apply py-1 font-semibold text-gray-800;
   }
-  & td:first-child,
-  & th:first-child {
-    @apply text-left;
+  & tbody tr {
+    @apply border-b border-gray-100;
   }
+  /* first column of each metric group gets extra room */
+  & .group-start {
+    @apply pl-5;
+  }
+  /* wide tables (many numeric columns) */
+  &.dense {
+    @apply text-[0.75rem] md:text-[0.85rem];
+  }
+  &.dense th,
+  &.dense td {
+    @apply px-1.5;
+  }
+  &.dense .group-start {
+    @apply pl-4;
+  }
+  /* first column only: body rows and the row-spanning header cell
+     (later header rows start mid-table, so no :first-child there) */
+  & tbody td:first-child,
+  & tbody th:first-child,
+  & thead tr:first-child th:first-child {
+    @apply pl-3 text-left;
+  }
+  & td:last-child,
+  & th:last-child {
+    @apply pr-3;
+  }
+  /* section label rows inside tbody */
+  & tr.section-row {
+    @apply border-b-0;
+  }
+  & tr.section-row td {
+    @apply pt-2.5 pb-0.5 text-left text-xs text-gray-400 italic;
+  }
+  & tr.ours-row {
+    @apply border-b-0 bg-ours font-medium;
+  }
+}
+
+/* Spanning group header: underline with a gap between neighbouring groups */
+@utility group-head {
+  @apply mx-2 block border-b border-gray-300 pb-1.5;
 }
 
 @utility scrollbar-light {
@@ -153,5 +213,21 @@
   &::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.25);
     border-radius: 9999px;
+  }
+}
+
+/* Edge shadows that appear only while a wide block can still scroll sideways */
+@utility scroll-shadow {
+  background:
+    linear-gradient(to right, white 30%, rgb(255 255 255 / 0)) left / 2rem 100% no-repeat local,
+    linear-gradient(to left, white 30%, rgb(255 255 255 / 0)) right / 2rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgb(0 0 0 / 0.14), transparent) left / 0.75rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgb(0 0 0 / 0.14), transparent) right / 0.75rem 100% no-repeat scroll;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

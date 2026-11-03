@@ -61,7 +61,7 @@ export default function TsneExplorer({ base = '/tsne' }: { base?: string }) {
   }, []);
 
   const height = Math.max(240, Math.round(width / 2.1));
-  const current = layoutKey ?? data?.layouts[0].key ?? '';
+  const current = layoutKey ?? data?.layouts.find((item) => item.key === 'cls')?.key ?? data?.layouts[0].key ?? '';
   // one pixel mapping per layout (each has its own extent), plus the interpolated point positions
   const maps = React.useMemo(() => {
     if (!data || !width) return null;
@@ -186,8 +186,8 @@ export default function TsneExplorer({ base = '/tsne' }: { base?: string }) {
               onClick={() => switchLayout(L.key)}
               className={
                 L.key === current
-                  ? 'border border-gray-800 bg-gray-800 px-3 py-1 text-white'
-                  : 'border border-gray-300 bg-white px-3 py-1 text-gray-600 hover:border-gray-800'
+                  ? ' border border-gray-900 bg-gray-900 px-3.5 py-1 text-white'
+                  : ' border border-gray-300 bg-white px-3.5 py-1 text-gray-600 transition hover:border-gray-500'
               }
             >
               {L.label}
@@ -290,7 +290,7 @@ export default function TsneExplorer({ base = '/tsne' }: { base?: string }) {
       )}
 
       {data && popup && (
-        <div className='pointer-events-none absolute z-20 border border-gray-300 bg-white' style={popupStyle}>
+        <div className='pointer-events-none absolute z-20 overflow-hidden border border-gray-200 bg-white shadow-lg' style={popupStyle}>
           <MotionPreview
             key={popup.idx}
             url={asset(`${base}/w/${popup.idx}.bin`)}
