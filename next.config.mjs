@@ -1,4 +1,6 @@
-const basePath = process.env.GITHUB_PAGES === "true" ? "/unified-inertial-encoder" : "";
+// The repo is the organisation's root Pages site (unified-inertial-encoder.github.io), served at the
+// domain root, so no basePath. Set NEXT_BASE_PATH (e.g. "/repo-name") only for a project-page deploy.
+const basePath = process.env.NEXT_BASE_PATH ?? "";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

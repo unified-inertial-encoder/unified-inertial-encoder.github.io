@@ -3,7 +3,7 @@ export const siteConfig = {
   shortTitle: 'Unified Inertial Encoder',
   description:
     'Transferring human motion knowledge to humanoid inertial odometry and motion-description retrieval through a shared inertial interface. Zero-shot on a physical Unitree G1, with 0.099 m/s velocity error and 1.78 ms TensorRT inference on an NVIDIA L40S.',
-  url: 'https://unified-inertial-encoder.github.io/unified-inertial-encoder/',
+  url: 'https://unified-inertial-encoder.github.io/',
   github: 'https://github.com/unified-inertial-encoder',
   code: 'https://github.com/unified-inertial-encoder/Unified-Inertial-Encoder',
 };

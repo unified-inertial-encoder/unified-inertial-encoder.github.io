@@ -20,8 +20,10 @@ citation) are ported from the [Co-Me](https://co-me-tokens.github.io/) project p
   t-SNE, scaling) and the real-G1 staircase recordings/estimates.
 - `public/paper/` — the paper PDF linked from the hero.
 
-Asset paths in raw `<img>`/`<video>` tags go through `asset()` in `lib/utils.ts`, which prefixes
-the GitHub Pages `basePath`.
+Asset paths in raw `<img>`/`<video>`/`fetch` calls go through `asset()` in `lib/utils.ts`, which
+prefixes the `basePath`. The site deploys as the organisation's root Pages site
+(`https://unified-inertial-encoder.github.io/`), so `basePath` is empty; set `NEXT_BASE_PATH=/<repo>`
+at build time only if it is ever served from a project sub-path.
 
 ## Local development
 
@@ -31,7 +33,7 @@ npm run dev
 ```
 
 Open http://localhost:3000. Run `npm run lint`, `npm run typecheck` and `npm run build` to check the
-project; `GITHUB_PAGES=true npm run build` reproduces the deployed build under `/unified-inertial-encoder/`.
+project; `npm run build` reproduces the deployed build (served from the domain root).
 
 ## Paper source
 

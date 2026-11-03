@@ -32,8 +32,6 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Build static site
-        env:
-          GITHUB_PAGES: "true"
         run: npm run build
       - name: Allow Next.js assets on GitHub Pages
         run: touch out/.nojekyll
