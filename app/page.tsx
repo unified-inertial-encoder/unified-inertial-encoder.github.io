@@ -17,7 +17,7 @@ import TsneExplorer from '@/components/tsne/TsneExplorer';
 import { authors, siteConfig } from '@/constant/config';
 import { asset, cn } from '@/lib/utils';
 
-const PAPER_PDF = '/paper/unified-inertial-encoder.pdf';
+const PAPER_PDF = '/paper/A_Unified_Inertial_Encoder_for_Human_and_Humanoid_Motion.pdf';
 
 export default function HomePage() {
   const sliderItems: { title: string; src: string; poster: string }[] = [
