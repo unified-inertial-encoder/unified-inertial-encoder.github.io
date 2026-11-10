@@ -17,7 +17,7 @@ import TsneExplorer from '@/components/tsne/TsneExplorer';
 import { authors, siteConfig } from '@/constant/config';
 import { asset, cn } from '@/lib/utils';
 
-const PAPER_PDF = '/paper/A_Unified_Inertial_Encoder_for_Human_and_Humanoid_Motion.pdf';
+const PAPER_URL = 'https://arxiv.org/abs/2611.10137';
 
 export default function HomePage() {
   const sliderItems: { title: string; src: string; poster: string }[] = [
@@ -80,7 +80,7 @@ export default function HomePage() {
             <span><sup>4</sup> Carnegie Mellon University</span>
           </div>
           <div className='mt-10 flex flex-wrap items-center justify-center gap-3'>
-            <HeroButton href={asset(PAPER_PDF)} external icon={<PaperIcon />}>
+            <HeroButton href={PAPER_URL} external icon={<PaperIcon />}>
               Paper
             </HeroButton>
             <HeroButton href={siteConfig.code} external icon={<GitHubIcon />}>

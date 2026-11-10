@@ -18,7 +18,8 @@ citation) are ported from the [Co-Me](https://co-me-tokens.github.io/) project p
   narrated segments (motivation, method, results); `public/images/posters/` holds their poster frames.
 - `public/images/` — paper figures (teaser, overview, qualitative trajectories, language strip,
   t-SNE, scaling) and the real-G1 staircase recordings/estimates.
-- `public/paper/` — the paper PDF linked from the hero.
+
+The hero's Paper button links to [the paper on arXiv](https://arxiv.org/abs/2611.10137).
 
 Asset paths in raw `<img>`/`<video>`/`fetch` calls go through `asset()` in `lib/utils.ts`, which
 prefixes the `basePath`. The site deploys as the organisation's root Pages site
@@ -38,9 +39,9 @@ project; `npm run build` reproduces the deployed build (served from the domain r
 ## Paper source
 
 Content and numerical tables match the sibling `latex/` repository's November 2, 2026 Overleaf
-version (`6f15545`, merged into `main` as `bc448d6`). The downloadable PDF includes the named
-authors. The site retains the existing video demos and interactive data; the scaling fit
-matches `latex/figures/scaling_3d_sources.json`, and the t-SNE opens on the paper's `[CLS]` view.
+version (`6f15545`, merged into `main` as `bc448d6`). The site retains the existing video demos
+and interactive data; the scaling fit matches `latex/figures/scaling_3d_sources.json`, and the
+t-SNE opens on the paper's `[CLS]` view.
 
 Web figures are rendered from the paper PDFs at 2200 pixels wide:
 
@@ -48,11 +49,6 @@ Web figures are rendered from the paper PDFs at 2200 pixels wide:
 - `Figure2.pdf` → `public/images/overview.png`
 - `Figure5.pdf` → `public/images/real-g1-runtime.png`
 - `qual_lang_g1_col.pdf`, `cls_tsne.pdf`, `scaling_3d.pdf` → matching PNG filenames
-
-The paper PDF was compiled in a temporary copy using Tectonic. On case-sensitive filesystems,
-the paper's `figures/figure2.pdf` reference needs an alias to `figures/Figure2.pdf`.
-The temporary build also selects T1 font encoding to retain the IEEE class's Times fonts.
-These compatibility adjustments do not change the tracked paper sources.
 
 ## GitHub Pages
 
